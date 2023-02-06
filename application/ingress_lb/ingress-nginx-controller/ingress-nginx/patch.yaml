@@ -1,0 +1,144 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2022-11-17T14:40:48Z"
+  generateName: ingress-nginx-admission-patch-
+  labels:
+    app.kubernetes.io/component: admission-webhook
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.3.0
+    controller-uid: f51dc916-394f-490f-8b7c-b43f98d6805d
+    helm.sh/chart: ingress-nginx-4.2.0
+    job-name: ingress-nginx-admission-patch
+  name: ingress-nginx-admission-patch-d6z8l
+  namespace: ingress-nginx
+  ownerReferences:
+  - apiVersion: batch/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: Job
+    name: ingress-nginx-admission-patch
+    uid: f51dc916-394f-490f-8b7c-b43f98d6805d
+  resourceVersion: "20370282"
+  uid: 2d6be5e2-0f78-47d3-93ce-1acc813aa523
+spec:
+  containers:
+  - args:
+    - patch
+    - --webhook-name=ingress-nginx-admission
+    - --namespace=$(POD_NAMESPACE)
+    - --patch-mutating=false
+    - --secret-name=ingress-nginx-admission
+    - --patch-failure-policy=Fail
+    env:
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    image: docker.io/liangjw/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+    imagePullPolicy: IfNotPresent
+    name: patch
+    resources:
+      limits:
+        cpu: 10m
+        memory: 20Mi
+      requests:
+        cpu: 10m
+        memory: 20Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-rs5nt
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: worker02
+  nodeSelector:
+    kubernetes.io/os: linux
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: OnFailure
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 2000
+  serviceAccount: ingress-nginx-admission
+  serviceAccountName: ingress-nginx-admission
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-rs5nt
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2022-11-17T14:41:09Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2022-11-17T14:41:09Z"
+    message: 'containers with unready status: [patch]'
+    reason: ContainersNotReady
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2022-11-17T14:41:09Z"
+    message: 'containers with unready status: [patch]'
+    reason: ContainersNotReady
+    status: "False"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2022-11-17T14:40:48Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - image: docker.io/liangjw/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+    imageID: ""
+    lastState: {}
+    name: patch
+    ready: false
+    restartCount: 0
+    started: false
+    state:
+      waiting:
+        message: Back-off pulling image "docker.io/liangjw/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660"
+        reason: ImagePullBackOff
+  hostIP: 10.32.20.5
+  phase: Pending
+  podIP: 10.244.3.69
+  podIPs:
+  - ip: 10.244.3.69
+  qosClass: Guaranteed
+  startTime: "2022-11-17T14:41:09Z"

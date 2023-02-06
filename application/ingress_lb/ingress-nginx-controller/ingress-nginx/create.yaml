@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2022-11-17T14:58:18Z"
+  generateName: ingress-nginx-admission-create-
+  labels:
+    app.kubernetes.io/component: admission-webhook
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.3.0
+    controller-uid: e73075e4-2d0a-45f3-84cc-b3060e51bdbe
+    helm.sh/chart: ingress-nginx-4.2.0
+    job-name: ingress-nginx-admission-create
+  name: ingress-nginx-admission-create-bzgnp
+  namespace: ingress-nginx
+  ownerReferences:
+  - apiVersion: batch/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: Job
+    name: ingress-nginx-admission-create
+    uid: e73075e4-2d0a-45f3-84cc-b3060e51bdbe
+  resourceVersion: "20369968"
+  uid: b2f648a5-9c8a-4e3d-8bc0-1f1e067d81b0
+spec:
+  containers:
+  - args:
+    - create
+    - --host=ingress-nginx-controller-admission,ingress-nginx-controller-admission.$(POD_NAMESPACE).svc
+    - --namespace=$(POD_NAMESPACE)
+    - --secret-name=ingress-nginx-admission
+    env:
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    image: docker.io/liangjw/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+    imagePullPolicy: IfNotPresent
+    name: create
+    resources:
+      limits:
+        cpu: 10m
+        memory: 20Mi
+      requests:
+        cpu: 10m
+        memory: 20Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-57wdb
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: master02
+  nodeSelector:
+    kubernetes.io/os: linux
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: OnFailure
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 2000
+  serviceAccount: ingress-nginx-admission
+  serviceAccountName: ingress-nginx-admission
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-57wdb
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2022-11-17T14:58:38Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2022-11-17T14:58:38Z"
+    message: 'containers with unready status: [create]'
+    reason: ContainersNotReady
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2022-11-17T14:58:38Z"
+    message: 'containers with unready status: [create]'
+    reason: ContainersNotReady
+    status: "False"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2022-11-17T14:58:18Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - image: docker.io/liangjw/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+    imageID: ""
+    lastState: {}
+    name: create
+    ready: false
+    restartCount: 0
+    started: false
+    state:
+      waiting:
+        reason: ContainerCreating
+  hostIP: 10.32.20.5
+  phase: Pending
+  qosClass: Guaranteed
+  startTime: "2022-11-17T14:58:38Z"
