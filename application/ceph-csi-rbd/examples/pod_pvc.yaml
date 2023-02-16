@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: busybox:1.28.4 
+      command: ["sleep", "3600"]
+      # command: ["/bin/bash", "-c"]
+      # args: [ "tail -f /dev/null" ]
+      volumeMounts:
+        - name: my-volume
+          mountPath: /yzuo/test
+      imagePullPolicy: IfNotPresent
+  volumes:
+    - name: my-volume
+      persistentVolumeClaim:
+        claimName: rbd-pvc
+        readOnly: false
